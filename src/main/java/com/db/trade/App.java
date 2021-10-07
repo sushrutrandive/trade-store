@@ -56,8 +56,10 @@ public class App
     	Assert.assertEquals("Store Size should be 4",4, list.size());
     	Assert.assertTrue("Store should have trade with TradeId ==T1 && Version == 10",
     						list.contains(TradeInfo.builder().withTradeId("T1").withVersion(10).build()));
+    	// Calculate future date
+    	LocalDate fd = LocalDate.now().plusDays(10);
     	boolean matchFound= list.stream().anyMatch((TradeInfo info)->{
-    		 return "T2".equals(info.getTradeId()) && info.getVersion()==1 &&  LocalDate.of(2021, 10, 1).isEqual(info.getMaturityDate());
+    		 return "T2".equals(info.getTradeId()) && info.getVersion()==1 &&  fd.isEqual(info.getMaturityDate());
     	 });    	
     	Assert.assertTrue("Store should overwritten trade with TradeId ==T2 && Version == 1 && maturity date as 01-Oct-2021",matchFound);
     	
@@ -89,10 +91,12 @@ public class App
 									.withExpired(false)
 									.withVersion(1).build());
     	// Duplicate Record
+    	// Calculate future date
+    	LocalDate fd = LocalDate.now().plusDays(10);
     	list.add(TradeInfo.builder().withBookId("B2")
 									.withCounterPartyId("C2")
 									.withCreatedDate(LocalDate.of(2021, 6, 20))
-									.withMaturityDate(LocalDate.of(2021, 10, 1))
+									.withMaturityDate(fd)
 									.withTradeId("T2")
 									.withExpired(false)
 									.withVersion(1).build());
